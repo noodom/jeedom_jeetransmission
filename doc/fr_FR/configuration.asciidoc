@@ -1,0 +1,9 @@
+==== Configuration du plugin
+
+Le plugin ne comporte pas de configuration générale.
+
+Lorsque l'on créer un équipement on doit fournir les éléments suivant :
+
+  * adresse du serveur Transmission
+  * utilisateur si requis
+  * mot de passe si requis
