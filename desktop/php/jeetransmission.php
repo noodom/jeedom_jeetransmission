@@ -122,9 +122,37 @@ $eqLogics = eqLogic::byType('jeetransmission');
             </div>
 
             <div class="form-group">
-              <label class="col-sm-3 control-label">{{Taille Maximum}}</label>
+              <label class="col-sm-3 control-label">{{Hôte}}</label>
               <div class="col-sm-3">
-                <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="maximum" type="text" placeholder="{{saisir la quantité maximum du jeetransmission}}">
+                <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="host" type="text" placeholder="{{adresse du Transmission'}}">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">{{Chemin}}</label>
+              <div class="col-sm-3">
+                <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="path" type="text" placeholder="{{chemin du Transmission'}}">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">{{Port}}</label>
+              <div class="col-sm-3">
+                <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="port" type="text" placeholder="{{port du Transmission'}}">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">{{Utilisateur}}</label>
+              <div class="col-sm-3">
+                <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="user" type="text" placeholder="{{utilisateur Transmission'}}">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">{{Mot de Passe}}</label>
+              <div class="col-sm-3">
+                <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="password" type="password" placeholder="{{mot de passe Transmission'}}">
               </div>
             </div>
 
