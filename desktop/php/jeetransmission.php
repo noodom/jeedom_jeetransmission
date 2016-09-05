@@ -122,23 +122,9 @@ $eqLogics = eqLogic::byType('jeetransmission');
             </div>
 
             <div class="form-group">
-              <label class="col-sm-3 control-label">{{Hôte}}</label>
+              <label class="col-sm-3 control-label">{{URL}}</label>
               <div class="col-sm-3">
-                <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="host" type="text" placeholder="{{adresse du Transmission'}}">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-sm-3 control-label">{{Chemin}}</label>
-              <div class="col-sm-3">
-                <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="path" type="text" placeholder="{{chemin du Transmission'}}">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-sm-3 control-label">{{Port}}</label>
-              <div class="col-sm-3">
-                <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="port" type="text" placeholder="{{port du Transmission'}}">
+                <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="url" type="text" placeholder="{{URL du Transmission avec ip, port, path'}}">
               </div>
             </div>
 

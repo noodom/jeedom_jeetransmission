@@ -19,10 +19,7 @@
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 if (!class_exists('Transmission')) {
-	require_once dirname(__FILE__) . '/../../3rdparty/Transmission/Transmission.php';
-}
-if (!class_exists('Client')) {
-	require_once dirname(__FILE__) . '/../../3rdparty/Transmission/Client.php';
+	require_once dirname(__FILE__) . '/../../3rdparty/TransmissionRPC.class.php';
 }
 
 class jeetransmission extends eqLogic {
@@ -167,10 +164,7 @@ class jeetransmissionCmd extends cmd {
 			case 'action' :
 			$eqLogic = $this->getEqLogic();
 
-			$client = new Client();
-			$client->authenticate($eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
-			$transmission = new Transmission($eqLogic->getConfiguration('host'), $eqLogic->getConfiguration('port'), $eqLogic->getConfiguration('path'));
-			$transmission->setClient($client);
+			$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
 			$torrent  = $transmission->get(1);
 			log::add('jeetransmission', 'debug', print_r($torrent->getMapping()));
 			return true;
