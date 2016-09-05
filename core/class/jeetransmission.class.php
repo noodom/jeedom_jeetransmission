@@ -165,8 +165,8 @@ class jeetransmissionCmd extends cmd {
 			$eqLogic = $this->getEqLogic();
 
 			$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
-			$torrent  = $transmission->get(1);
-			log::add('jeetransmission', 'debug', print_r($torrent->getMapping()));
+			$torrent  = $transmission->sstats();
+			log::add('jeetransmission', 'debug', print_r($torrent));
 			return true;
 			break;
 		}
