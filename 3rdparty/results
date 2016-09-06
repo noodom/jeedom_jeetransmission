@@ -1,0 +1,6 @@
+stdClass Object ( [arguments] => stdClass Object ( [activeTorrentCount] => 4 [downloadSpeed] => 569795 [torrentCount] => 4 [uploadSpeed] => 60571 [cumulative_stats] => stdClass Object ( [downloadedBytes] => 396261587167 [filesAdded] => 2083 [secondsActive] => 21332016 [sessionCount] => 14 [uploadedBytes] => 935458041192 ) [current_stats] => stdClass Object ( [downloadedBytes] => 59022596870 [filesAdded] => 249 [secondsActive] => 3555245 [sessionCount] => 1 [uploadedBytes] => 92548550617 ) ) [result] => success ) {"state":"ok","result":"1"}
+
+[activeTorrentCount]
+[downloadSpeed]
+[torrentCount]
+[uploadSpeed]
