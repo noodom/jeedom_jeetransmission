@@ -14,3 +14,5 @@ stdClass Object ( [arguments] => stdClass Object ( [activeTorrentCount] => 4 [do
 [id]
 [name]
 [status]
+6 terminé
+$rpc->return_as_array = true;
