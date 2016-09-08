@@ -25,16 +25,16 @@ if (!class_exists('Transmission')) {
 class jeetransmission extends eqLogic {
 
 	public function postUpdate() {
-		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'download');
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'inprogress');
 		if (!is_object($jeetransmissionCmd)) {
-			log::add('jeetransmission', 'debug', 'Création de la commande download');
+			log::add('jeetransmission', 'debug', 'Création de la commande inprogress');
 			$jeetransmissionCmd = new jeetransmissionCmd();
 			$jeetransmissionCmd->setName(__('Téléchargements en cours', __FILE__));
 			$jeetransmissionCmd->setEqLogic_id($this->id);
 			$jeetransmissionCmd->setEqType('jeetransmission');
-			$jeetransmissionCmd->setLogicalId('download');
+			$jeetransmissionCmd->setLogicalId('inprogress');
 			$jeetransmissionCmd->setType('info');
-			$jeetransmissionCmd->setSubType('string');
+			$jeetransmissionCmd->setSubType('numeric');
 			$jeetransmissionCmd->save();
 		}
 		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'finish');
@@ -46,31 +46,31 @@ class jeetransmission extends eqLogic {
 			$jeetransmissionCmd->setEqType('jeetransmission');
 			$jeetransmissionCmd->setLogicalId('finish');
 			$jeetransmissionCmd->setType('info');
+			$jeetransmissionCmd->setSubType('numeric');
+			$jeetransmissionCmd->save();
+		}
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'pause');
+		if (!is_object($jeetransmissionCmd)) {
+			log::add('jeetransmission', 'debug', 'Création de la commande pause');
+			$jeetransmissionCmd = new jeetransmissionCmd();
+			$jeetransmissionCmd->setName(__('Torrents en pause', __FILE__));
+			$jeetransmissionCmd->setEqLogic_id($this->id);
+			$jeetransmissionCmd->setEqType('jeetransmission');
+			$jeetransmissionCmd->setLogicalId('pause');
+			$jeetransmissionCmd->setType('info');
+			$jeetransmissionCmd->setSubType('numeric');
+			$jeetransmissionCmd->save();
+		}
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'list');
+		if (!is_object($jeetransmissionCmd)) {
+			log::add('jeetransmission', 'debug', 'Création de la commande list');
+			$jeetransmissionCmd = new jeetransmissionCmd();
+			$jeetransmissionCmd->setName(__('Liste des torrents', __FILE__));
+			$jeetransmissionCmd->setEqLogic_id($this->id);
+			$jeetransmissionCmd->setEqType('jeetransmission');
+			$jeetransmissionCmd->setLogicalId('list');
+			$jeetransmissionCmd->setType('info');
 			$jeetransmissionCmd->setSubType('string');
-			$jeetransmissionCmd->save();
-		}
-		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'limitdl');
-		if (!is_object($jeetransmissionCmd)) {
-			log::add('jeetransmission', 'debug', 'Création de la commande limitdl');
-			$jeetransmissionCmd = new jeetransmissionCmd();
-			$jeetransmissionCmd->setName(__('Limite pour le download', __FILE__));
-			$jeetransmissionCmd->setEqLogic_id($this->id);
-			$jeetransmissionCmd->setEqType('jeetransmission');
-			$jeetransmissionCmd->setLogicalId('limitdl');
-			$jeetransmissionCmd->setType('info');
-			$jeetransmissionCmd->setSubType('numeric');
-			$jeetransmissionCmd->save();
-		}
-		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'limitup');
-		if (!is_object($jeetransmissionCmd)) {
-			log::add('jeetransmission', 'debug', 'Création de la commande limitup');
-			$jeetransmissionCmd = new jeetransmissionCmd();
-			$jeetransmissionCmd->setName(__('Limite pour le upload', __FILE__));
-			$jeetransmissionCmd->setEqLogic_id($this->id);
-			$jeetransmissionCmd->setEqType('jeetransmission');
-			$jeetransmissionCmd->setLogicalId('limitup');
-			$jeetransmissionCmd->setType('info');
-			$jeetransmissionCmd->setSubType('numeric');
 			$jeetransmissionCmd->save();
 		}
 		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'download');
@@ -144,7 +144,67 @@ class jeetransmission extends eqLogic {
 	}
 
 	public function btStatus() {
-
+		$transmission = new TransmissionRPC($this->getConfiguration('url'), $this->getConfiguration('user'), $this->getConfiguration('password'));
+		$transmission->return_as_array = true;
+		$torrent  = $transmission->sstats(); // inprogress, finish, pause, upload, download
+		if (is_set($torrent['arguments']['torrentCount'])) {
+			$download = $torrent['arguments']['torrentCount'];
+		} else {
+			$download = 0;
+		}
+		if (is_set($torrent['arguments']['pausedTorrentCount'])) {
+			$pause = $torrent['arguments']['pausedTorrentCount'];
+		} else {
+			$pause = 0;
+		}
+		if (is_set($torrent['arguments']['activeTorrentCount'])) {
+			$finish = $download - $pause - $torrent['arguments']['activeTorrentCount'];
+		} else {
+			$finish = $download - $pause;
+		}
+		if (is_set($torrent['arguments']['downloadSpeed'])) {
+			$download = $torrent['arguments']['downloadSpeed'];
+		} else {
+			$download = 0;
+		}
+		if (is_set($torrent['arguments']['uploadSpeed'])) {
+			$upload = $torrent['arguments']['uploadSpeed'];
+		} else {
+			$upload = 0;
+		}
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'inprogress');
+		if ($jeetransmissionCmd->getConfiguration('value') != $download) {
+			$jeetransmissionCmd->setConfiguration('value',$download);
+			$jeetransmissionCmd->save();
+			$jeetransmissionCmd->event($download);
+		}
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'pause');
+		if ($jeetransmissionCmd->getConfiguration('value') != $pause) {
+			$jeetransmissionCmd->setConfiguration('value',$pause);
+			$jeetransmissionCmd->save();
+			$jeetransmissionCmd->event($pause);
+		}
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'finish');
+		if ($jeetransmissionCmd->getConfiguration('value') != $finish) {
+			$jeetransmissionCmd->setConfiguration('value',$finish);
+			$jeetransmissionCmd->save();
+			$jeetransmissionCmd->event($finish);
+		}
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'upload');
+		if ($jeetransmissionCmd->getConfiguration('value') != $upload) {
+			$jeetransmissionCmd->setConfiguration('value',$upload);
+			$jeetransmissionCmd->save();
+			$jeetransmissionCmd->event($upload);
+		}
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'download');
+		if ($jeetransmissionCmd->getConfiguration('value') != $download) {
+			$jeetransmissionCmd->setConfiguration('value',$download);
+			$jeetransmissionCmd->save();
+			$jeetransmissionCmd->event($download);
+		}
+		log::add('jeetransmission', 'debug', print_r($torrent));
+		$torrent  = $transmission->get(); //list
+		log::add('jeetransmission', 'debug', print_r($torrent));
 	}
 }
 
@@ -164,11 +224,19 @@ class jeetransmissionCmd extends cmd {
 			case 'action' :
 			$eqLogic = $this->getEqLogic();
 
-			$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
-			$torrent  = $transmission->sstats();
-			log::add('jeetransmission', 'debug', print_r($torrent));
-			$torrent  = $transmission->get();
-			log::add('jeetransmission', 'debug', print_r($torrent));
+			if ($this->getLogicalId() == 'query') {
+				$eqLogic->btStatus();
+			} else if ($this->getLogicalId() == 'remove') { // remove
+				if (is_numeric(trim($_options['title']))) {
+					$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
+					$torrent  = $transmission->remove(trim($_options['title']));
+				}
+			} else if ($this->getLogicalId() == 'purge') { // remove
+				if (is_numeric(trim($_options['title']))) {
+					$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
+					$torrent  = $transmission->remove(trim($_options['title']), true);
+				}
+			}
 			return true;
 			break;
 		}
