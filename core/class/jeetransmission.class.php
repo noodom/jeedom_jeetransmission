@@ -147,27 +147,27 @@ class jeetransmission extends eqLogic {
 		$transmission = new TransmissionRPC($this->getConfiguration('url'), $this->getConfiguration('user'), $this->getConfiguration('password'));
 		$transmission->return_as_array = true;
 		$torrent  = $transmission->sstats(); // inprogress, finish, pause, upload, download
-		if (is_set($torrent['arguments']['torrentCount'])) {
+		if (array_key_exists('torrentCount',$torrent['arguments'])) {
 			$download = $torrent['arguments']['torrentCount'];
 		} else {
 			$download = 0;
 		}
-		if (is_set($torrent['arguments']['pausedTorrentCount'])) {
+		if (is_set('pausedTorrentCount',$torrent['arguments'])) {
 			$pause = $torrent['arguments']['pausedTorrentCount'];
 		} else {
 			$pause = 0;
 		}
-		if (is_set($torrent['arguments']['activeTorrentCount'])) {
+		if (is_set('activeTorrentCount',$torrent['arguments'])) {
 			$finish = $download - $pause - $torrent['arguments']['activeTorrentCount'];
 		} else {
 			$finish = $download - $pause;
 		}
-		if (is_set($torrent['arguments']['downloadSpeed'])) {
+		if (is_set('downloadSpeed',$torrent['arguments'])) {
 			$download = $torrent['arguments']['downloadSpeed'];
 		} else {
 			$download = 0;
 		}
-		if (is_set($torrent['arguments']['uploadSpeed'])) {
+		if (is_set('uploadSpeed',$torrent['arguments'])) {
 			$upload = $torrent['arguments']['uploadSpeed'];
 		} else {
 			$upload = 0;
