@@ -152,22 +152,22 @@ class jeetransmission extends eqLogic {
 		} else {
 			$download = 0;
 		}
-		if (is_set('pausedTorrentCount',$torrent['arguments'])) {
+		if (array_key_exists('pausedTorrentCount',$torrent['arguments'])) {
 			$pause = $torrent['arguments']['pausedTorrentCount'];
 		} else {
 			$pause = 0;
 		}
-		if (is_set('activeTorrentCount',$torrent['arguments'])) {
+		if (array_key_exists('activeTorrentCount',$torrent['arguments'])) {
 			$finish = $download - $pause - $torrent['arguments']['activeTorrentCount'];
 		} else {
 			$finish = $download - $pause;
 		}
-		if (is_set('downloadSpeed',$torrent['arguments'])) {
+		if (array_key_exists('downloadSpeed',$torrent['arguments'])) {
 			$download = $torrent['arguments']['downloadSpeed'];
 		} else {
 			$download = 0;
 		}
-		if (is_set('uploadSpeed',$torrent['arguments'])) {
+		if (array_key_exists('uploadSpeed',$torrent['arguments'])) {
 			$upload = $torrent['arguments']['uploadSpeed'];
 		} else {
 			$upload = 0;
