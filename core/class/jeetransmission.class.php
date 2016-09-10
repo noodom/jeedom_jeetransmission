@@ -176,6 +176,8 @@ class jeetransmission extends eqLogic {
 
 		log::add('jeetransmission', 'debug', print_r($torrent));
 		log::add('jeetransmission', 'debug', $torrent['arguments']['torrentCount']);
+		$torrent  = $transmission->stats();
+		log::add('jeetransmission', 'debug', print_r($torrent));
 
 		$torrent  = $transmission->get(); //list
 		$list = '{';
