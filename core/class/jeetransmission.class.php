@@ -194,15 +194,16 @@ class jeetransmission extends eqLogic {
 			$jeetransmissionCmd->event($download);
 
 		log::add('jeetransmission', 'debug', print_r($torrent));
-		log::add('jeetransmission', 'debug', print_r($torrent['arguments']['uploadSpeed']));
+		log::add('jeetransmission', 'debug', $torrent['arguments']['uploadSpeed']);
 
 		$torrent  = $transmission->get(); //list
 		$list = '{';
 		foreach ($torrent['arguments']['torrents'] as $value) {
 			$list .= '{"id":' . $value['id'] . ',"name":' . $value['name'] . ',"status":' . $value['status'] . '}';
 		}
-		$list .= '';
+		$list .= '}';
 		log::add('jeetransmission', 'debug', print_r($torrent));
+		log::add('jeetransmission', 'debug', $list);
 	}
 }
 
