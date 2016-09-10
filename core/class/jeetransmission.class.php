@@ -173,37 +173,33 @@ class jeetransmission extends eqLogic {
 			$upload = 0;
 		}
 		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'inprogress');
-		if ($jeetransmissionCmd->getConfiguration('value') != $download) {
 			$jeetransmissionCmd->setConfiguration('value',$download);
 			$jeetransmissionCmd->save();
 			$jeetransmissionCmd->event($download);
-		}
 		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'pause');
-		if ($jeetransmissionCmd->getConfiguration('value') != $pause) {
 			$jeetransmissionCmd->setConfiguration('value',$pause);
 			$jeetransmissionCmd->save();
 			$jeetransmissionCmd->event($pause);
-		}
 		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'finish');
-		if ($jeetransmissionCmd->getConfiguration('value') != $finish) {
 			$jeetransmissionCmd->setConfiguration('value',$finish);
 			$jeetransmissionCmd->save();
 			$jeetransmissionCmd->event($finish);
-		}
 		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'upload');
-		if ($jeetransmissionCmd->getConfiguration('value') != $upload) {
 			$jeetransmissionCmd->setConfiguration('value',$upload);
 			$jeetransmissionCmd->save();
 			$jeetransmissionCmd->event($upload);
-		}
 		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'download');
-		if ($jeetransmissionCmd->getConfiguration('value') != $download) {
 			$jeetransmissionCmd->setConfiguration('value',$download);
 			$jeetransmissionCmd->save();
 			$jeetransmissionCmd->event($download);
-		}
+
 		log::add('jeetransmission', 'debug', print_r($torrent));
 		$torrent  = $transmission->get(); //list
+		$list = '{';
+		foreach ($torrent['torrents'] as $value) {
+			$list .= '{"id":' . $value['id'] . ',"name":' . $value['name'] . ',"status":' . $value['status'] . '}';
+		}
+		$list .= '';
 		log::add('jeetransmission', 'debug', print_r($torrent));
 	}
 }

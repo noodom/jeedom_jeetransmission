@@ -122,7 +122,7 @@ $eqLogics = eqLogic::byType('jeetransmission');
             </div>
 
             <div class="form-group">
-              <label class="col-sm-3 control-label">{{URL}}</label>
+              <label class="col-sm-3 control-label">{{URL RPC}}</label>
               <div class="col-sm-3">
                 <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="url" type="text" placeholder="{{URL du Transmission avec ip, port, path'}}">
               </div>
@@ -139,6 +139,13 @@ $eqLogics = eqLogic::byType('jeetransmission');
               <label class="col-sm-3 control-label">{{Mot de Passe}}</label>
               <div class="col-sm-3">
                 <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="password" type="password" placeholder="{{mot de passe Transmission'}}">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">{{Adresse de consultation}}</label>
+              <div class="col-sm-3">
+                <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="url" type="text" placeholder="{{URL de consultation pour le modal'}}">
               </div>
             </div>
 
