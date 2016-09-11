@@ -182,14 +182,29 @@ class jeetransmission extends eqLogic {
 
 		log::add('jeetransmission', 'debug', print_r($torrent));
 		log::add('jeetransmission', 'debug', $torrent['arguments']['torrentCount']);
-		
+
 		$torrent  = $transmission->get(); //list
 		$list = '{';
+		$finish = 0;
 			foreach ($torrent['arguments']['torrents'] as $value) {
+				if ($list != '{') {
+					$list .= ',';
+				}
 				$list .= '{"id":' . $value['id'] . ',"name":' . $value['name'] . ',"status":' . $value['status'] . '}';
+				if ($value['doneDate'] != '0') {
+					$finish++;
+				}
 			}
 			$list .= '}';
-			log::add('jeetransmission', 'debug', print_r($torrent));
+
+			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'finish');
+			if ($finish != $jeetransmissionCmd->getConfiguration('value')) {
+			$jeetransmissionCmd->setConfiguration('value',$finish);
+			$jeetransmissionCmd->save();
+			$jeetransmissionCmd->event($finish);
+			}
+
+			//log::add('jeetransmission', 'debug', print_r($torrent));
 			//log::add('jeetransmission', 'debug', $list);
 			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'list');
 			$jeetransmissionCmd->setConfiguration('value',$list);
