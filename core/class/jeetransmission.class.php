@@ -147,36 +147,42 @@ class jeetransmission extends eqLogic {
 		$transmission = new TransmissionRPC($this->getConfiguration('url'), $this->getConfiguration('user'), $this->getConfiguration('password'));
 		$transmission->return_as_array = true;
 		$torrent  = $transmission->sstats(); // inprogress, finish, pause, upload, download
-		$download = (array_key_exists('torrentCount',$torrent['arguments'])) ? $torrent['arguments']['torrentCount'] : '0';
+		$active = (array_key_exists('activeTorrentCount',$torrent['arguments'])) ? $torrent['arguments']['activeTorrentCount'] : '0';
 		$pause = (array_key_exists('pausedTorrentCount',$torrent['arguments'])) ? $torrent['arguments']['pausedTorrentCount'] : '0';
-		$finish = (array_key_exists('activeTorrentCount',$torrent['arguments'])) ? $download - $pause - $torrent['arguments']['activeTorrentCount'] : '0';
 		$download = (array_key_exists('downloadSpeed',$torrent['arguments'])) ? $torrent['arguments']['downloadSpeed'] : '0';
 		$upload = (array_key_exists('uploadSpeed',$torrent['arguments'])) ? $torrent['arguments']['uploadSpeed'] : '0';
 
 		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'inprogress');
-		$jeetransmissionCmd->setConfiguration('value',$download);
-		$jeetransmissionCmd->save();
-		$jeetransmissionCmd->event($download);
+		if ($active != $jeetransmissionCmd->getConfiguration('value')) {
+			$jeetransmissionCmd->setConfiguration('value',$active);
+			$jeetransmissionCmd->save();
+			$jeetransmissionCmd->event($active);
+		}
+
 		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'pause');
+		if ($pause != $jeetransmissionCmd->getConfiguration('value')) {
 		$jeetransmissionCmd->setConfiguration('value',$pause);
 		$jeetransmissionCmd->save();
 		$jeetransmissionCmd->event($pause);
-		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'finish');
-		$jeetransmissionCmd->setConfiguration('value',$finish);
-		$jeetransmissionCmd->save();
-		$jeetransmissionCmd->event($finish);
+		}
+
 		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'upload');
+		if ($upload != $jeetransmissionCmd->getConfiguration('value')) {
 		$jeetransmissionCmd->setConfiguration('value',$upload);
 		$jeetransmissionCmd->save();
 		$jeetransmissionCmd->event($upload);
+		}
+
 		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'download');
+		if ($download != $jeetransmissionCmd->getConfiguration('value')) {
 		$jeetransmissionCmd->setConfiguration('value',$download);
 		$jeetransmissionCmd->save();
 		$jeetransmissionCmd->event($download);
+		}
 
 		log::add('jeetransmission', 'debug', print_r($torrent));
 		log::add('jeetransmission', 'debug', $torrent['arguments']['torrentCount']);
-		$torrent  = $transmission->stats();
+		$torrent  = $transmission->sget();
 		log::add('jeetransmission', 'debug', print_r($torrent));
 
 		$torrent  = $transmission->get(); //list
