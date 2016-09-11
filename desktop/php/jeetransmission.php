@@ -145,7 +145,7 @@ $eqLogics = eqLogic::byType('jeetransmission');
             <div class="form-group">
               <label class="col-sm-3 control-label">{{Adresse de consultation}}</label>
               <div class="col-sm-3">
-                <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="url" type="text" placeholder="{{URL de consultation pour le modal'}}">
+                <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="link" type="text" placeholder="{{URL de consultation pour le modal'}}">
               </div>
             </div>
 
