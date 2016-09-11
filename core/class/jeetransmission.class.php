@@ -121,16 +121,52 @@ class jeetransmission extends eqLogic {
 			$jeetransmissionCmd->setSubType('message');
 			$jeetransmissionCmd->save();
 		}
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'add');
+		if (!is_object($jeetransmissionCmd)) {
+			log::add('jeetransmission', 'debug', 'Création de la commande add');
+			$jeetransmissionCmd = new jeetransmissionCmd();
+			$jeetransmissionCmd->setName(__('Ajouter un torrent', __FILE__));
+			$jeetransmissionCmd->setEqLogic_id($this->id);
+			$jeetransmissionCmd->setEqType('jeetransmission');
+			$jeetransmissionCmd->setLogicalId('add');
+			$jeetransmissionCmd->setType('action');
+			$jeetransmissionCmd->setSubType('message');
+			$jeetransmissionCmd->save();
+		}
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'stop');
+		if (!is_object($jeetransmissionCmd)) {
+			log::add('jeetransmission', 'debug', 'Création de la commande stop');
+			$jeetransmissionCmd = new jeetransmissionCmd();
+			$jeetransmissionCmd->setName(__('Arrêter un torrent', __FILE__));
+			$jeetransmissionCmd->setEqLogic_id($this->id);
+			$jeetransmissionCmd->setEqType('jeetransmission');
+			$jeetransmissionCmd->setLogicalId('stop');
+			$jeetransmissionCmd->setType('action');
+			$jeetransmissionCmd->setSubType('message');
+			$jeetransmissionCmd->save();
+		}
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'start');
+		if (!is_object($jeetransmissionCmd)) {
+			log::add('jeetransmission', 'debug', 'Création de la commande start');
+			$jeetransmissionCmd = new jeetransmissionCmd();
+			$jeetransmissionCmd->setName(__('Démarrer un torrent', __FILE__));
+			$jeetransmissionCmd->setEqLogic_id($this->id);
+			$jeetransmissionCmd->setEqType('jeetransmission');
+			$jeetransmissionCmd->setLogicalId('start');
+			$jeetransmissionCmd->setType('action');
+			$jeetransmissionCmd->setSubType('message');
+			$jeetransmissionCmd->save();
+		}
 		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'query');
 		if (!is_object($jeetransmissionCmd)) {
 			log::add('jeetransmission', 'debug', 'Création de la commande query');
 			$jeetransmissionCmd = new jeetransmissionCmd();
-			$jeetransmissionCmd->setName(__('Interroger Transmission', __FILE__));
+			$jeetransmissionCmd->setName(__('Rafraichir les informations de Transmission', __FILE__));
 			$jeetransmissionCmd->setEqLogic_id($this->id);
 			$jeetransmissionCmd->setEqType('jeetransmission');
 			$jeetransmissionCmd->setLogicalId('query');
 			$jeetransmissionCmd->setType('action');
-			$jeetransmissionCmd->setSubType('message');
+			$jeetransmissionCmd->setSubType('other');
 			$jeetransmissionCmd->save();
 		}
 
@@ -180,8 +216,7 @@ class jeetransmission extends eqLogic {
 		$jeetransmissionCmd->event($download);
 		}
 
-		log::add('jeetransmission', 'debug', print_r($torrent));
-		log::add('jeetransmission', 'debug', $torrent['arguments']['torrentCount']);
+		//log::add('jeetransmission', 'debug', print_r($torrent));
 
 		$torrent  = $transmission->get(); //list
 		$list = '{';
@@ -204,7 +239,7 @@ class jeetransmission extends eqLogic {
 			$jeetransmissionCmd->event($finish);
 			}
 
-			//log::add('jeetransmission', 'debug', print_r($torrent));
+			log::add('jeetransmission', 'debug', print_r($torrent));
 			//log::add('jeetransmission', 'debug', $list);
 			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'list');
 			$jeetransmissionCmd->setConfiguration('value',$list);
@@ -241,6 +276,19 @@ class jeetransmission extends eqLogic {
 						$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
 						$torrent  = $transmission->remove(trim($_options['title']), true);
 					}
+				} else if ($this->getLogicalId() == 'start') { // remove
+					if (is_numeric(trim($_options['title']))) {
+						$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
+						$torrent  = $transmission->start(trim($_options['title']));
+					}
+				} else if ($this->getLogicalId() == 'stop') { // remove
+					if (is_numeric(trim($_options['title']))) {
+						$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
+						$torrent  = $transmission->stop(trim($_options['title']));
+					}
+				} else if ($this->getLogicalId() == 'add') { // remove
+						$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
+						$torrent  = $transmission->add(trim($_options['title']));
 				}
 				return true;
 				break;
