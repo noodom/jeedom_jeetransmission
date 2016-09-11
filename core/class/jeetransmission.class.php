@@ -249,76 +249,74 @@ class jeetransmission extends eqLogic {
 			$jeetransmissionCmd->event($list);
 		}
 
-	}
-
-	public function toHtml($_version = 'dashboard') {
-		$replace = $this->preToHtml($_version);
-		if (!is_array($replace)) {
-			return $replace;
-		}
-		$version = jeedom::versionAlias($_version);
-		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'inprogress');
-		$replace['#torrent#'] = $jeetransmissionCmd->getConfiguration('value');
-		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'download');
-		$replace['#download#'] = $jeetransmissionCmd->getConfiguration('value');
-		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'upload');
-		$replace['#upload#'] = $jeetransmissionCmd->getConfiguration('value');
-		$replace['#link#'] = $this->getConfiguration('link');
-		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'query');
-		$replace['#refresh_id#'] = $jeetransmissionCmd->getId();
-
-		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'jeetransmission', 'jeetransmission')));
-	}
-
-}
-
-class jeetransmissionCmd extends cmd {
-	public function preSave() {
-		if ($this->getSubtype() == 'message') {
-			$this->setDisplay('message_disable', 1);
-		}
-	}
-
-	public function execute($_options = null) {
-		switch ($this->getType()) {
-			case 'info' :
-			return $this->getConfiguration('value');
-			break;
-
-			case 'action' :
-			$eqLogic = $this->getEqLogic();
-
-			if ($this->getLogicalId() == 'query') {
-				$eqLogic->btStatus();
-			} else if ($this->getLogicalId() == 'remove') { // remove
-				if (is_numeric(trim($_options['title']))) {
-					$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
-					$torrent  = $transmission->remove(trim($_options['title']));
-				}
-			} else if ($this->getLogicalId() == 'purge') { // remove
-				if (is_numeric(trim($_options['title']))) {
-					$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
-					$torrent  = $transmission->remove(trim($_options['title']), true);
-				}
-			} else if ($this->getLogicalId() == 'start') { // remove
-				if (is_numeric(trim($_options['title']))) {
-					$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
-					$torrent  = $transmission->start(trim($_options['title']));
-				}
-			} else if ($this->getLogicalId() == 'stop') { // remove
-				if (is_numeric(trim($_options['title']))) {
-					$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
-					$torrent  = $transmission->stop(trim($_options['title']));
-				}
-			} else if ($this->getLogicalId() == 'add') { // remove
-				$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
-				$torrent  = $transmission->add(trim($_options['title']));
+		public function toHtml($_version = 'dashboard') {
+			$replace = $this->preToHtml($_version);
+			if (!is_array($replace)) {
+				return $replace;
 			}
-			return true;
-			break;
+			$version = jeedom::versionAlias($_version);
+			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'inprogress');
+			$replace['#torrent#'] = $jeetransmissionCmd->getConfiguration('value');
+			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'download');
+			$replace['#download#'] = $jeetransmissionCmd->getConfiguration('value');
+			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'upload');
+			$replace['#upload#'] = $jeetransmissionCmd->getConfiguration('value');
+			$replace['#link#'] = $this->getConfiguration('link');
+			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'query');
+			$replace['#refresh_id#'] = $jeetransmissionCmd->getId();
+
+			return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'jeetransmission', 'jeetransmission')));
 		}
+
 	}
 
-}
+	class jeetransmissionCmd extends cmd {
+		public function preSave() {
+			if ($this->getSubtype() == 'message') {
+				$this->setDisplay('message_disable', 1);
+			}
+		}
 
-?>
+		public function execute($_options = null) {
+			switch ($this->getType()) {
+				case 'info' :
+				return $this->getConfiguration('value');
+				break;
+
+				case 'action' :
+				$eqLogic = $this->getEqLogic();
+
+				if ($this->getLogicalId() == 'query') {
+					$eqLogic->btStatus();
+				} else if ($this->getLogicalId() == 'remove') { // remove
+					if (is_numeric(trim($_options['title']))) {
+						$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
+						$torrent  = $transmission->remove(trim($_options['title']));
+					}
+				} else if ($this->getLogicalId() == 'purge') { // remove
+					if (is_numeric(trim($_options['title']))) {
+						$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
+						$torrent  = $transmission->remove(trim($_options['title']), true);
+					}
+				} else if ($this->getLogicalId() == 'start') { // remove
+					if (is_numeric(trim($_options['title']))) {
+						$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
+						$torrent  = $transmission->start(trim($_options['title']));
+					}
+				} else if ($this->getLogicalId() == 'stop') { // remove
+					if (is_numeric(trim($_options['title']))) {
+						$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
+						$torrent  = $transmission->stop(trim($_options['title']));
+					}
+				} else if ($this->getLogicalId() == 'add') { // remove
+					$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
+					$torrent  = $transmission->add(trim($_options['title']));
+				}
+				return true;
+				break;
+			}
+		}
+
+	}
+
+	?>
