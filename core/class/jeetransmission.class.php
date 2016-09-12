@@ -247,6 +247,8 @@ class jeetransmission extends eqLogic {
 			$jeetransmissionCmd->setConfiguration('value',$list);
 			$jeetransmissionCmd->save();
 			$jeetransmissionCmd->event($list);
+
+			$this->refreshWidget();
 		}
 
 		public function toHtml($_version = 'dashboard') {
