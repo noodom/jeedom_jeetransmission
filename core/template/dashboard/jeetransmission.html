@@ -4,9 +4,9 @@
    <i class='fa fa-refresh pull-right cursor refresh' style="margin-top: 3px;margin-right: 3px;"></i>
    <span class="cmd cmd-widget" data-cmd_id="#refresh_id#" style="display:none;"></span>
    <center class="widget-name"><strong><a href="#eqLink#" style="font-size : 1.1em;#hideEqLogicName#">#name_display# <span style="font-size: 0.85em;position: relative;top:-2px;">#object_name#</span></a></strong></center>
-
-<div style="margin-top: -15px;">
-    <center><span><i class="fa fa-cloud-download"></i> #download# / <i class="fa fa-cloud-upload"></i> #upload#</span></center>
+<br/>
+<div>
+    <center><span><i class="fa fa-cloud-download" style="font-size : 2em;"></i> #download# / <i class="fa fa-cloud-upload" style="font-size : 2em;"></i> #upload#</span></center>
     <center><span>Torrents actifs : #torrent#</span></center>
 </div>
 <script>
@@ -15,7 +15,7 @@
 });
 function loadModal#id#() {
   $('#md_modal2').dialog({
-    title: "PVR"
+    title: "Transmission"
   });
   $('#md_modal2').load('index.php?v=d&plugin=jeetransmission&modal=jeetransmission&id=#id#').dialog('open');
 }
