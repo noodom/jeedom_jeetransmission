@@ -266,6 +266,7 @@ class jeetransmission extends eqLogic {
 			$replace['#link#'] = $this->getConfiguration('link');
 			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'query');
 			$replace['#refresh_id#'] = $jeetransmissionCmd->getId();
+			$replace['#id#'] = $this->getId();
 
 			return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'jeetransmission', 'jeetransmission')));
 		}
