@@ -291,13 +291,30 @@ class jeetransmission extends eqLogic {
 				$jeetransmissionCmd->event($finish);
 			}
 
-			$torrent  = $transmission->sget(); //list
-			log::add('jeetransmission', 'debug', print_r($torrent));
+			//log::add('jeetransmission', 'debug', print_r($torrent));
 			//log::add('jeetransmission', 'debug', $list);
 			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'list');
 			$jeetransmissionCmd->setConfiguration('value',$list);
 			$jeetransmissionCmd->save();
 			$jeetransmissionCmd->event($list);
+
+			$torrent  = $transmission->sget(); //list
+			$down = (array_key_exists('speed-limit-down-enabled',$torrent['arguments'])) ? $torrent['arguments']['speed-limit-down'] : '0';
+			$up = (array_key_exists('speed-limit-up-enabled',$torrent['arguments'])) ? $torrent['arguments']['speed-limit-up'] : '0';
+
+			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'limitup');
+			if ($up != $jeetransmissionCmd->getConfiguration('value')) {
+			$jeetransmissionCmd->setConfiguration('value',$up);
+			$jeetransmissionCmd->save();
+			$jeetransmissionCmd->event($up);
+		}
+
+			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'limitdown');
+			if ($down != $jeetransmissionCmd->getConfiguration('value')) {
+			$jeetransmissionCmd->setConfiguration('value',$down);
+			$jeetransmissionCmd->save();
+			$jeetransmissionCmd->event($down);
+		}
 
 			$this->refreshWidget();
 		}
@@ -365,6 +382,20 @@ class jeetransmission extends eqLogic {
 				} else if ($this->getLogicalId() == 'add') { // remove
 					$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
 					$torrent  = $transmission->add(trim($_options['title']));
+				} else if ($this->getLogicalId() == 'setlimitup') { // remove
+					$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
+					if (trim($_options['title']) == '0') {
+						$torrent  = $transmission->add(array('speed-limit-up-enabled' => 0));
+					} else {
+						$torrent  = $transmission->add(array('speed-limit-up-enabled' => 1,'speed-limit-up' => trim($_options['title'])));
+					}
+				} else if ($this->getLogicalId() == 'setlimitdown') { // remove
+					$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
+					if (trim($_options['title']) == '0') {
+						$torrent  = $transmission->add(array('speed-limit-down-enabled' => 0));
+					} else {
+						$torrent  = $transmission->add(array('speed-limit-down-enabled' => 1,'speed-limit-down' => trim($_options['title'])));
+					}
 				}
 				return true;
 				break;
