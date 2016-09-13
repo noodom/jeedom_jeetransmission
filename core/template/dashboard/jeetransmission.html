@@ -1,22 +1,23 @@
 <div class="eqLogic-widget eqLogic allowResize" style="height: #height#;width: #width#;border:#border#;border-radius:#border-radius#;background-color: #background-color#;color: #color#;#style#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="dashboard" >
-   <i class='fa fa-external-link pull-left modal' style="margin-top: 3px;margin-left: 3px;" onclick="loadModal#id#()"></i>
-   <i class='fa fa-refresh pull-right cursor refresh' style="margin-top: 3px;margin-right: 3px;"></i>
-   <span class="cmd cmd-widget" data-cmd_id="#refresh_id#" style="display:none;"></span>
-   <center class="widget-name"><strong><a href="#eqLink#" style="font-size : 1.1em;#hideEqLogicName#">#name_display# <span style="font-size: 0.85em;position: relative;top:-2px;">#object_name#</span></a></strong></center>
-<br/>
-<div>
+  <i class='fa fa-external-link pull-left modal' style="margin-top: 3px;margin-left: 3px;"></i>
+  <i class='fa fa-refresh pull-right cursor refresh' style="margin-top: 3px;margin-right: 3px;"></i>
+  <span class="cmd cmd-widget" data-cmd_id="#refresh_id#" style="display:none;"></span>
+  <center class="widget-name"><strong><a href="#eqLink#" style="font-size : 1.1em;#hideEqLogicName#">#name_display# <span style="font-size: 0.85em;position: relative;top:-2px;">#object_name#</span></a></strong></center>
+  <br/>
+  <div>
     <center><span><i class="fa fa-cloud-download" style="font-size : 2em;"></i> #download# / <i class="fa fa-cloud-upload" style="font-size : 2em;"></i> #upload#</span></center>
     <center><span>Torrents actifs : #torrent#</span></center>
-</div>
-<script>
-   $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
+  </div>
+  <script>
+  $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
     jeedom.cmd.execute({id: '#refresh_id#'});
-});
-
-$('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
-  $('#md_modal2').dialog({
-    title: "Transmission"
   });
-  $('#md_modal2').load('index.php?v=d&plugin=jeetransmission&modal=jeetransmission&id=#id#').dialog('open');
-});
-</script>
+  
+  $('.eqLogic[data-eqLogic_uid=#uid#] .modal').on('click', function () {
+    $('#md_modal2').dialog({
+      title: "Transmission"
+    });
+    $('#md_modal2').load('index.php?v=d&plugin=jeetransmission&modal=jeetransmission&id=#id#').dialog('open');
+  });
+  </script>
+</div>
