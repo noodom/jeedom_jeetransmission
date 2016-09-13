@@ -291,7 +291,8 @@ class jeetransmission extends eqLogic {
 				$jeetransmissionCmd->event($finish);
 			}
 
-			//log::add('jeetransmission', 'debug', print_r($torrent));
+			$torrent  = $transmission->sget(); //list
+			log::add('jeetransmission', 'debug', print_r($torrent));
 			//log::add('jeetransmission', 'debug', $list);
 			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'list');
 			$jeetransmissionCmd->setConfiguration('value',$list);
