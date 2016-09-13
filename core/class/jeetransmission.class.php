@@ -99,6 +99,54 @@ class jeetransmission extends eqLogic {
 			$jeetransmissionCmd->setSubType('numeric');
 			$jeetransmissionCmd->save();
 		}
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'limitdown');
+		if (!is_object($jeetransmissionCmd)) {
+			log::add('jeetransmission', 'debug', 'Création de la commande limitdown');
+			$jeetransmissionCmd = new jeetransmissionCmd();
+			$jeetransmissionCmd->setName(__('Limite de download', __FILE__));
+			$jeetransmissionCmd->setEqLogic_id($this->id);
+			$jeetransmissionCmd->setEqType('jeetransmission');
+			$jeetransmissionCmd->setLogicalId('limitdown');
+			$jeetransmissionCmd->setType('info');
+			$jeetransmissionCmd->setSubType('numeric');
+			$jeetransmissionCmd->save();
+		}
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'limitup');
+		if (!is_object($jeetransmissionCmd)) {
+			log::add('jeetransmission', 'debug', 'Création de la commande limitup');
+			$jeetransmissionCmd = new jeetransmissionCmd();
+			$jeetransmissionCmd->setName(__('Limite de upload', __FILE__));
+			$jeetransmissionCmd->setEqLogic_id($this->id);
+			$jeetransmissionCmd->setEqType('jeetransmission');
+			$jeetransmissionCmd->setLogicalId('limitup');
+			$jeetransmissionCmd->setType('info');
+			$jeetransmissionCmd->setSubType('numeric');
+			$jeetransmissionCmd->save();
+		}
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'setlimitdown');
+		if (!is_object($jeetransmissionCmd)) {
+			log::add('jeetransmission', 'debug', 'Création de la commande setlimitdown');
+			$jeetransmissionCmd = new jeetransmissionCmd();
+			$jeetransmissionCmd->setName(__('Fixer la limite de download', __FILE__));
+			$jeetransmissionCmd->setEqLogic_id($this->id);
+			$jeetransmissionCmd->setEqType('jeetransmission');
+			$jeetransmissionCmd->setLogicalId('setlimitdown');
+			$jeetransmissionCmd->setType('action');
+			$jeetransmissionCmd->setSubType('message');
+			$jeetransmissionCmd->save();
+		}
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'setlimitup');
+		if (!is_object($jeetransmissionCmd)) {
+			log::add('jeetransmission', 'debug', 'Création de la commande setlimitup');
+			$jeetransmissionCmd = new jeetransmissionCmd();
+			$jeetransmissionCmd->setName(__('Fixer la limite de upload', __FILE__));
+			$jeetransmissionCmd->setEqLogic_id($this->id);
+			$jeetransmissionCmd->setEqType('jeetransmission');
+			$jeetransmissionCmd->setLogicalId('setlimitup');
+			$jeetransmissionCmd->setType('action');
+			$jeetransmissionCmd->setSubType('message');
+			$jeetransmissionCmd->save();
+		}
 		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'remove');
 		if (!is_object($jeetransmissionCmd)) {
 			log::add('jeetransmission', 'debug', 'Création de la commande remove');
@@ -188,7 +236,9 @@ class jeetransmission extends eqLogic {
 		$active = (array_key_exists('activeTorrentCount',$torrent['arguments'])) ? $torrent['arguments']['activeTorrentCount'] : '0';
 		$pause = (array_key_exists('pausedTorrentCount',$torrent['arguments'])) ? $torrent['arguments']['pausedTorrentCount'] : '0';
 		$download = (array_key_exists('downloadSpeed',$torrent['arguments'])) ? $torrent['arguments']['downloadSpeed'] : '0';
+		$download = $download / 1024;
 		$upload = (array_key_exists('uploadSpeed',$torrent['arguments'])) ? $torrent['arguments']['uploadSpeed'] : '0';
+		$upload = $upload / 1024;
 
 		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'inprogress');
 		if ($active != $jeetransmissionCmd->getConfiguration('value')) {
@@ -241,7 +291,7 @@ class jeetransmission extends eqLogic {
 				$jeetransmissionCmd->event($finish);
 			}
 
-			log::add('jeetransmission', 'debug', print_r($torrent));
+			//log::add('jeetransmission', 'debug', print_r($torrent));
 			//log::add('jeetransmission', 'debug', $list);
 			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'list');
 			$jeetransmissionCmd->setConfiguration('value',$list);
