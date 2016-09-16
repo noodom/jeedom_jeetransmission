@@ -272,135 +272,133 @@ class jeetransmission extends eqLogic {
 
 		$torrent  = $transmission->get(); //list
 		$list = '[';
-			$finish = 0;
-			foreach ($torrent['arguments']['torrents'] as $value) {
-				if ($list != '[') {
-					$list .= ',';
-				}
-				$list .= '{"id":"' . $value['id'] . '","name":"' . $value['name'] . '","status":"' . $value['status'] . '"}';
-				if ($value['doneDate'] != '0') {
-					$finish ++;
-				}
+		$finish = 0;
+		foreach ($torrent['arguments']['torrents'] as $value) {
+			if ($list != '[') {
+				$list .= ',';
 			}
-			$list .= ']';
-
-			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'finish');
-			if ($finish != $jeetransmissionCmd->getConfiguration('value')) {
-				$jeetransmissionCmd->setConfiguration('value',$finish);
-				$jeetransmissionCmd->save();
-				$jeetransmissionCmd->event($finish);
+			$list .= '{"id":"' . $value['id'] . '","name":"' . $value['name'] . '","status":"' . $value['status'] . '"}';
+			if ($value['doneDate'] != '0') {
+				$finish ++;
 			}
+		}
+		$list .= ']';
 
-			//log::add('jeetransmission', 'debug', print_r($torrent));
-			//log::add('jeetransmission', 'debug', $list);
-			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'list');
-			$jeetransmissionCmd->setConfiguration('value',$list);
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'finish');
+		if ($finish != $jeetransmissionCmd->getConfiguration('value')) {
+			$jeetransmissionCmd->setConfiguration('value',$finish);
 			$jeetransmissionCmd->save();
-			$jeetransmissionCmd->event($list);
+			$jeetransmissionCmd->event($finish);
+		}
 
-			$torrent  = $transmission->sget(); //list
-			$down = (array_key_exists('speed-limit-down-enabled',$torrent['arguments'])) ? $torrent['arguments']['speed-limit-down'] : '0';
-			$up = (array_key_exists('speed-limit-up-enabled',$torrent['arguments'])) ? $torrent['arguments']['speed-limit-up'] : '0';
+		//log::add('jeetransmission', 'debug', print_r($torrent));
+		//log::add('jeetransmission', 'debug', $list);
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'list');
+		$jeetransmissionCmd->setConfiguration('value',$list);
+		$jeetransmissionCmd->save();
+		$jeetransmissionCmd->event($list);
 
-			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'limitup');
-			if ($up != $jeetransmissionCmd->getConfiguration('value')) {
+		$torrent  = $transmission->sget(); //list
+		$down = (array_key_exists('speed-limit-down-enabled',$torrent['arguments'])) ? $torrent['arguments']['speed-limit-down'] : '0';
+		$up = (array_key_exists('speed-limit-up-enabled',$torrent['arguments'])) ? $torrent['arguments']['speed-limit-up'] : '0';
+
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'limitup');
+		if ($up != $jeetransmissionCmd->getConfiguration('value')) {
 			$jeetransmissionCmd->setConfiguration('value',$up);
 			$jeetransmissionCmd->save();
 			$jeetransmissionCmd->event($up);
 		}
 
-			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'limitdown');
-			if ($down != $jeetransmissionCmd->getConfiguration('value')) {
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'limitdown');
+		if ($down != $jeetransmissionCmd->getConfiguration('value')) {
 			$jeetransmissionCmd->setConfiguration('value',$down);
 			$jeetransmissionCmd->save();
 			$jeetransmissionCmd->event($down);
 		}
 
-			$this->refreshWidget();
-		}
-
-		public function toHtml($_version = 'dashboard') {
-			$replace = $this->preToHtml($_version);
-			if (!is_array($replace)) {
-				return $replace;
-			}
-			$version = jeedom::versionAlias($_version);
-			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'inprogress');
-			$replace['#torrent#'] = $jeetransmissionCmd->getConfiguration('value');
-			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'download');
-			$replace['#download#'] = $jeetransmissionCmd->getConfiguration('value');
-			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'upload');
-			$replace['#upload#'] = $jeetransmissionCmd->getConfiguration('value');
-			$replace['#link#'] = $this->getConfiguration('link');
-			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'query');
-			$replace['#refresh_id#'] = $jeetransmissionCmd->getId();
-			$replace['#id#'] = $this->getId();
-
-			return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'jeetransmission', 'jeetransmission')));
-		}
-
+		$this->refreshWidget();
 	}
 
-	class jeetransmissionCmd extends cmd {
-		public function preSave() {
-			if ($this->getSubtype() == 'message') {
-				$this->setDisplay('message_disable', 1);
-			}
+	public function toHtml($_version = 'dashboard') {
+		$replace = $this->preToHtml($_version);
+		if (!is_array($replace)) {
+			return $replace;
 		}
+		$version = jeedom::versionAlias($_version);
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'inprogress');
+		$replace['#torrent#'] = $jeetransmissionCmd->getConfiguration('value');
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'download');
+		$replace['#download#'] = $jeetransmissionCmd->getConfiguration('value');
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'upload');
+		$replace['#upload#'] = $jeetransmissionCmd->getConfiguration('value');
+		$replace['#link#'] = $this->getConfiguration('link');
+		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'query');
+		$replace['#refresh_id#'] = $jeetransmissionCmd->getId();
+		$replace['#id#'] = $this->getId();
 
-		public function execute($_options = null) {
-			switch ($this->getType()) {
-				case 'info' :
-				return $this->getConfiguration('value');
+		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'jeetransmission', 'jeetransmission')));
+	}
+
+}
+
+class jeetransmissionCmd extends cmd {
+	public function preSave() {
+		if ($this->getSubtype() == 'message') {
+			$this->setDisplay('message_disable', 1);
+		}
+	}
+
+	public function execute($_options = null) {
+		switch ($this->getType()) {
+			case 'info' :
+			return $this->getConfiguration('value');
+			break;
+
+			case 'action' :
+			$eqLogic = $this->getEqLogic();
+			$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
+			$transmission->return_as_array = true;
+			log::add('jeetransmission', 'debug', $this->getLogicalId() . ' ' . $_options['title']);
+			switch ($this->getLogicalId()) {
+				case 'query' :
+				$eqLogic->btStatus();
 				break;
-
-				case 'action' :
-				$eqLogic = $this->getEqLogic();
-				log::add('jeetransmission', 'debug', $this->getLogicalId() . ' ' . $_options['title']);
-				if ($this->getLogicalId() == 'query') {
-					$eqLogic->btStatus();
-				} else if ($this->getLogicalId() == 'remove') { // remove
-						$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
-						$torrent  = $transmission->remove(trim($_options['title']));
-						log::add('jeetransmission', 'debug', $torrent . ' ' . $_options['title']);
-				} else if ($this->getLogicalId() == 'purge') { // remove
-					if (is_numeric(trim($_options['title']))) {
-						$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
-						$torrent  = $transmission->remove(trim($_options['title']), true);
-					}
-				} else if ($this->getLogicalId() == 'start') { // remove
-					if (is_numeric(trim($_options['title']))) {
-						$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
-						$torrent  = $transmission->start(trim($_options['title']));
-					}
-				} else if ($this->getLogicalId() == 'stop') { // remove
-					if (is_numeric(trim($_options['title']))) {
-						$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
-						$torrent  = $transmission->stop(trim($_options['title']));
-					}
-				} else if ($this->getLogicalId() == 'add') { // remove
-					$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
-					$torrent  = $transmission->add(trim($_options['title']));
-				} else if ($this->getLogicalId() == 'setlimitup') { // remove
-					$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
-					if (trim($_options['title']) == '0') {
-						$torrent  = $transmission->add(array('speed-limit-up-enabled' => 0));
-					} else {
-						$torrent  = $transmission->add(array('speed-limit-up-enabled' => 1,'speed-limit-up' => trim($_options['title'])));
-					}
-				} else if ($this->getLogicalId() == 'setlimitdown') { // remove
-					$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
-					if (trim($_options['title']) == '0') {
-						$torrent  = $transmission->add(array('speed-limit-down-enabled' => 0));
-					} else {
-						$torrent  = $transmission->add(array('speed-limit-down-enabled' => 1,'speed-limit-down' => trim($_options['title'])));
-					}
+				case 'remove' :
+				log::add('jeetransmission', 'debug', $_options['title']);
+				$transmission->remove(trim($_options['title']));
+				break;
+				case 'purge' :
+				$torrent  = $transmission->remove(trim($_options['title']), true);
+				break;
+				case 'start' :
+				$torrent  = $transmission->start(trim($_options['title']));
+				break;
+				case 'stop' :
+				$torrent  = $transmission->stop(trim($_options['title']));
+				break;
+				case 'add' :
+				$torrent  = $transmission->add(trim($_options['title']));
+				break;
+				case 'setlimitup' :
+				if (trim($_options['title']) == '0') {
+					$torrent  = $transmission->sset(array('speed-limit-up-enabled' => 0));
+				} else {
+					$torrent  = $transmission->sset(array('speed-limit-up-enabled' => 1,'speed-limit-up' => trim($_options['title'])));
 				}
-				return true;
+				break;
+				case 'setlimitdown' :
+				if (trim($_options['title']) == '0') {
+					$torrent  = $transmission->sset(array('speed-limit-down-enabled' => 0));
+				} else {
+					$torrent  = $transmission->sset(array('speed-limit-down-enabled' => 1,'speed-limit-down' => trim($_options['title'])));
+				}
 				break;
 			}
+			return true;
+			break;
 		}
-
 	}
 
-	?>
+}
+
+?>
