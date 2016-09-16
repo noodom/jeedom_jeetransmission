@@ -356,7 +356,7 @@ class jeetransmission extends eqLogic {
 
 				case 'action' :
 				$eqLogic = $this->getEqLogic();
-
+				log::add('jeetransmission', 'debug', $this->getLogicalId() . ' ' . $_options['title']);
 				if ($this->getLogicalId() == 'query') {
 					$eqLogic->btStatus();
 				} else if ($this->getLogicalId() == 'remove') { // remove
