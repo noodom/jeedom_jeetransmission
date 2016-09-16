@@ -271,7 +271,7 @@ class jeetransmission extends eqLogic {
 		//log::add('jeetransmission', 'debug', print_r($torrent));
 
 		$torrent  = $transmission->get(); //list
-		$list = '{';
+		$list = '[';
 			$finish = 0;
 			foreach ($torrent['arguments']['torrents'] as $value) {
 				if ($list != '{') {
@@ -282,7 +282,7 @@ class jeetransmission extends eqLogic {
 					$finish ++;
 				}
 			}
-			$list .= '}';
+			$list .= ']';
 
 			$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'finish');
 			if ($finish != $jeetransmissionCmd->getConfiguration('value')) {
