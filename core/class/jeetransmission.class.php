@@ -274,7 +274,7 @@ class jeetransmission extends eqLogic {
 		$list = '[';
 			$finish = 0;
 			foreach ($torrent['arguments']['torrents'] as $value) {
-				if ($list != '{') {
+				if ($list != '[') {
 					$list .= ',';
 				}
 				$list .= '{"id":' . $value['id'] . ',"name":' . $value['name'] . ',"status":' . $value['status'] . '}';
