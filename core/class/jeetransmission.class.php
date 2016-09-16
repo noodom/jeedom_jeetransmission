@@ -365,7 +365,8 @@ class jeetransmissionCmd extends cmd {
 				break;
 				case 'remove' :
 				log::add('jeetransmission', 'debug', $_options['title']);
-				$transmission->remove(trim($_options['title']));
+				$torrent  = $transmission->remove(trim($_options['title']), false);
+				log::add('jeetransmission', 'debug', $torrent);
 				break;
 				case 'purge' :
 				$torrent  = $transmission->remove(trim($_options['title']), true);
