@@ -277,7 +277,7 @@ class jeetransmission extends eqLogic {
 				if ($list != '[') {
 					$list .= ',';
 				}
-				$list .= '{"id":' . $value['id'] . ',"name":' . $value['name'] . ',"status":' . $value['status'] . '}';
+				$list .= '{"id":"' . $value['id'] . '","name":"' . $value['name'] . '","status":"' . $value['status'] . '"}';
 				if ($value['doneDate'] != '0') {
 					$finish ++;
 				}
