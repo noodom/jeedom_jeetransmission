@@ -357,7 +357,7 @@ class jeetransmissionCmd extends cmd {
 			case 'action' :
 			$eqLogic = $this->getEqLogic();
 			$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
-			$transmission->return_as_array = true;
+			$transmission->debug = true;
 			log::add('jeetransmission', 'debug', $this->getLogicalId() . ' ' . $_options['title']);
 			switch ($this->getLogicalId()) {
 				case 'query' :
