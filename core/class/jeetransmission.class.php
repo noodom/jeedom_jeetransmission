@@ -365,26 +365,26 @@ class jeetransmissionCmd extends cmd {
 				break;
 				case 'remove' :
 				log::add('jeetransmission', 'debug', $_options['title']);
-				$torrent  = $transmission->remove(trim($_options['title']), false);
-				log::add('jeetransmission', 'debug', $torrent);
+				$result  = $transmission->remove(trim($_options['title']), false);
+				log::add('jeetransmission', 'debug', $result->result);
 				break;
 				case 'purge' :
-				$torrent  = $transmission->remove(trim($_options['title']), true);
+				$result  = $transmission->remove(trim($_options['title']), true);
 				break;
 				case 'start' :
-				$torrent  = $transmission->start(trim($_options['title']));
+				$result  = $transmission->start(trim($_options['title']));
 				break;
 				case 'stop' :
-				$torrent  = $transmission->stop(trim($_options['title']));
+				$result  = $transmission->stop(trim($_options['title']));
 				break;
 				case 'add' :
-				$torrent  = $transmission->add(trim($_options['title']));
+				$result  = $transmission->add(trim($_options['title']));
 				break;
 				case 'setlimitup' :
 				if (trim($_options['title']) == '0') {
-					$torrent  = $transmission->sset(array('speed-limit-up-enabled' => 0));
+					$result  = $transmission->sset(array('speed-limit-up-enabled' => 0));
 				} else {
-					$torrent  = $transmission->sset(array('speed-limit-up-enabled' => 1,'speed-limit-up' => trim($_options['title'])));
+					$result  = $transmission->sset(array('speed-limit-up-enabled' => 1,'speed-limit-up' => trim($_options['title'])));
 				}
 				break;
 				case 'setlimitdown' :
