@@ -360,6 +360,7 @@ class jeetransmission extends eqLogic {
 				if ($this->getLogicalId() == 'query') {
 					$eqLogic->btStatus();
 				} else if ($this->getLogicalId() == 'remove') { // remove
+					log::add('jeetransmission', 'debug', $this->getLogicalId() . ' ' . $_options['title']);
 					if (is_numeric(trim($_options['title']))) {
 						$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
 						$torrent  = $transmission->remove(trim($_options['title']));
