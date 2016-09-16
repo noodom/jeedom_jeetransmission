@@ -363,6 +363,7 @@ class jeetransmission extends eqLogic {
 					if (is_numeric(trim($_options['title']))) {
 						$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
 						$torrent  = $transmission->remove(trim($_options['title']));
+						log::add('jeetransmission', 'debug', $torrent . ' ' . $_options['title']);
 					}
 				} else if ($this->getLogicalId() == 'purge') { // remove
 					if (is_numeric(trim($_options['title']))) {
