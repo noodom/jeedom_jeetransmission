@@ -238,7 +238,7 @@ class jeetransmission extends eqLogic {
 		$download = (array_key_exists('downloadSpeed',$torrent['arguments'])) ? $torrent['arguments']['downloadSpeed'] : '0';
 		$download = round($download / 1024, 2);
 		$upload = (array_key_exists('uploadSpeed',$torrent['arguments'])) ? $torrent['arguments']['uploadSpeed'] : '0';
-		$upload = $upload / 1024;
+		$upload = round($upload / 1024, 2);
 
 		$jeetransmissionCmd = jeetransmissionCmd::byEqLogicIdAndLogicalId($this->getId(),'inprogress');
 		if ($active != $jeetransmissionCmd->getConfiguration('value')) {
@@ -364,9 +364,10 @@ class jeetransmissionCmd extends cmd {
 				$eqLogic->btStatus();
 				break;
 				case 'remove' :
-				log::add('jeetransmission', 'debug', $_options['title']);
+				$result  = $transmission->stop(trim($_options['title']));
+				log::add('jeetransmission', 'debug', 'resultat : ' . $result->result);
 				$result  = $transmission->remove(trim($_options['title']), false);
-				log::add('jeetransmission', 'debug', $result->result);
+				log::add('jeetransmission', 'debug', 'resultat : ' . $result->result);
 				break;
 				case 'purge' :
 				$result  = $transmission->remove(trim($_options['title']), true);
