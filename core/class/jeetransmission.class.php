@@ -236,7 +236,7 @@ class jeetransmission extends eqLogic {
 		$active = (array_key_exists('activeTorrentCount',$torrent['arguments'])) ? $torrent['arguments']['activeTorrentCount'] : '0';
 		$pause = (array_key_exists('pausedTorrentCount',$torrent['arguments'])) ? $torrent['arguments']['pausedTorrentCount'] : '0';
 		$download = (array_key_exists('downloadSpeed',$torrent['arguments'])) ? $torrent['arguments']['downloadSpeed'] : '0';
-		$download = $download / 1024;
+		$download = round($download / 1024, 2);
 		$upload = (array_key_exists('uploadSpeed',$torrent['arguments'])) ? $torrent['arguments']['uploadSpeed'] : '0';
 		$upload = $upload / 1024;
 
