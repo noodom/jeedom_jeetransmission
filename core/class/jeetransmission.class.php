@@ -364,9 +364,7 @@ class jeetransmissionCmd extends cmd {
 				$eqLogic->btStatus();
 				break;
 				case 'remove' :
-				$result  = $transmission->stop(trim($_options['title']));
-				log::add('jeetransmission', 'debug', 'resultat : ' . $result->result);
-				$result  = $transmission->remove(trim($_options['title']), false);
+				$result  = $transmission->remove(trim($_options['title']));
 				log::add('jeetransmission', 'debug', 'resultat : ' . $result->result);
 				break;
 				case 'purge' :
