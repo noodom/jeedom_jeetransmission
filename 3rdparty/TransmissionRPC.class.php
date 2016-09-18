@@ -291,7 +291,7 @@ class TransmissionRPC
    */
   public function remove ( $ids, $delete_local_data = false )
   {
-    if ( !is_array( $ids ) ) $ids = array( $ids );	// Convert $ids to an array if only a single id was passed
+    //if ( !is_array( $ids ) ) $ids = array( $ids );	// Convert $ids to an array if only a single id was passed
     $request = array(
       "ids" => $ids,
       "delete-local-data" => $delete_local_data
