@@ -3,19 +3,6 @@
  * Transmission bittorrent client/daemon RPC communication class
  * Copyright (C) 2010 Johan Adriaans <johan.adriaans@gmail.com>,
  *                    Bryce Chidester <bryce@cobryce.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -178,7 +165,7 @@ class TransmissionRPC
    * Get information on torrents in transmission, if the ids parameter is
    * empty all torrents will be returned. The fields array can be used to return certain
    * fields. Default fields are: "id", "name", "status", "doneDate", "haveValid", "totalSize".
-   * See https://trac.transmissionbt.com/browser/trunk/doc/rpc-spec.txt for available fields
+   * See https://trac.transmissionbt.com/browser/trunk/extras/rpc-spec.txt for available fields
    *
    * @param array fields An array of return fields
    * @param int|array ids A list of transmission torrent ids
@@ -212,14 +199,14 @@ class TransmissionRPC
    *   "seedRatioMode"       | number     which ratio to use.  See tr_ratiolimit
    *   "uploadLimit"         | number     maximum upload speed (in K/s)
    *   "uploadLimited"       | boolean    true if "uploadLimit" is honored
-   * See https://trac.transmissionbt.com/browser/trunk/doc/rpc-spec.txt for more information
+   * See https://trac.transmissionbt.com/browser/trunk/extras/rpc-spec.txt for more information
    *
    * @param array arguments An associative array of arguments to set
    * @param int|array ids A list of transmission torrent ids
    */
   public function set ( $ids = array(), $arguments = array() )
   {
-    // See https://trac.transmissionbt.com/browser/trunk/doc/rpc-spec.txt for available fields
+    // See https://trac.transmissionbt.com/browser/trunk/extras/rpc-spec.txt for available fields
     if ( !is_array( $ids ) ) $ids = array( $ids );	// Convert $ids to an array if only a single id was passed
     if ( !isset( $arguments['ids'] ) ) $arguments['ids'] = $ids;	// Any $ids given in $arguments overrides the method parameter
     return $this->request( "torrent-set", $arguments );
@@ -291,7 +278,7 @@ class TransmissionRPC
    */
   public function remove ( $ids, $delete_local_data = false )
   {
-    //if ( !is_array( $ids ) ) $ids = array( $ids );	// Convert $ids to an array if only a single id was passed
+    if ( !is_array( $ids ) ) $ids = array( $ids );	// Convert $ids to an array if only a single id was passed
     $request = array(
       "ids" => $ids,
       "delete-local-data" => $delete_local_data
