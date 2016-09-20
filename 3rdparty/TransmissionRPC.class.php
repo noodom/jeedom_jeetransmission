@@ -3,6 +3,19 @@
  * Transmission bittorrent client/daemon RPC communication class
  * Copyright (C) 2010 Johan Adriaans <johan.adriaans@gmail.com>,
  *                    Bryce Chidester <bryce@cobryce.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -165,7 +178,7 @@ class TransmissionRPC
    * Get information on torrents in transmission, if the ids parameter is
    * empty all torrents will be returned. The fields array can be used to return certain
    * fields. Default fields are: "id", "name", "status", "doneDate", "haveValid", "totalSize".
-   * See https://trac.transmissionbt.com/browser/trunk/extras/rpc-spec.txt for available fields
+   * See https://trac.transmissionbt.com/browser/trunk/doc/rpc-spec.txt for available fields
    *
    * @param array fields An array of return fields
    * @param int|array ids A list of transmission torrent ids
@@ -199,14 +212,14 @@ class TransmissionRPC
    *   "seedRatioMode"       | number     which ratio to use.  See tr_ratiolimit
    *   "uploadLimit"         | number     maximum upload speed (in K/s)
    *   "uploadLimited"       | boolean    true if "uploadLimit" is honored
-   * See https://trac.transmissionbt.com/browser/trunk/extras/rpc-spec.txt for more information
+   * See https://trac.transmissionbt.com/browser/trunk/doc/rpc-spec.txt for more information
    *
    * @param array arguments An associative array of arguments to set
    * @param int|array ids A list of transmission torrent ids
    */
   public function set ( $ids = array(), $arguments = array() )
   {
-    // See https://trac.transmissionbt.com/browser/trunk/extras/rpc-spec.txt for available fields
+    // See https://trac.transmissionbt.com/browser/trunk/doc/rpc-spec.txt for available fields
     if ( !is_array( $ids ) ) $ids = array( $ids );	// Convert $ids to an array if only a single id was passed
     if ( !isset( $arguments['ids'] ) ) $arguments['ids'] = $ids;	// Any $ids given in $arguments overrides the method parameter
     return $this->request( "torrent-set", $arguments );
@@ -305,6 +318,47 @@ class TransmissionRPC
   }
 
   /**
+   * 3.7.  Renaming a Torrent's Path
+   *
+   * Method name: "torrent-rename-path"
+   *
+   * For more information on the use of this function, see the transmission.h
+   * documentation of tr_torrentRenamePath(). In particular, note that if this
+   * call succeeds you'll want to update the torrent's "files" and "name" field
+   * with torrent-get.
+   *
+   * Request arguments:
+   *
+   * string                           | value type & description
+   * ---------------------------------+-------------------------------------------------
+   * "ids"                            | array      the torrent torrent list, as described in 3.1
+   *                                  |            (must only be 1 torrent)
+   * "path"                           | string     the path to the file or folder that will be renamed
+   * "name"                           | string     the file or folder's new name
+
+   * Response arguments: "path", "name", and "id", holding the torrent ID integer
+   *
+   * @param int|array ids A 1-element list of transmission torrent ids
+   * @param string path The path to the file or folder that will be renamed
+   * @param string name The file or folder's new name
+   */
+  public function rename ( $ids, $path, $name )
+  {
+    if ( !is_array( $ids ) ) $ids = array( $ids );  // Convert $id to an array if only a single id was passed
+    if ( count($ids) !== 1 ) {
+      throw new TransmissionRPCException( 'A single id is accepted', TransmissionRPCException::E_INVALIDARG );
+    }
+
+    $request = array(
+      "ids" => $ids,
+      "path" => $path,
+      "name" => $name
+    );
+    return $this->request( "torrent-rename-path", $request );
+  }
+
+
+  /**
    * Retrieve session statistics
    *
    * @returns array of statistics
@@ -394,14 +448,15 @@ class TransmissionRPC
     {
       if( is_object( $value ) ) $array[$index] = $value->toArray();	// Convert objects to arrays so they can be JSON encoded
       if( is_array( $value ) ) $array[$index] = $this->cleanRequestData( $value );	// Recursion
-      if( empty( $value ) && $value !== 0 )	// Remove empty members
-      {
-        unset( $array[$index] );
-        continue; // Skip the rest of the tests - they may re-add the element.
-      }
+      if( empty( $value ) && $value != 0 ) unset( $array[$index] );	// Remove empty members
       if( is_numeric( $value ) ) $array[$index] = $value+0;	// Force type-casting for proper JSON encoding (+0 is a cheap way to maintain int/float/etc)
       if( is_bool( $value ) ) $array[$index] = ( $value ? 1 : 0);	// Store boolean values as 0 or 1
-      if( is_string( $value ) ) $array[$index] = utf8_encode( $value );	// Make sure all data is UTF-8 encoded for Transmission
+      if( is_string( $value ) ) {
+        if ( mb_detect_encoding($value,"auto") !== 'UTF-8' ) {
+          $array[$index] = mb_convert_encoding($value, "UTF-8");
+          //utf8_encode( $value );	// Make sure all data is UTF-8 encoded for Transmission
+        }
+      }
     }
     return $array;
   }
