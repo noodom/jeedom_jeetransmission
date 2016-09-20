@@ -365,9 +365,9 @@ class jeetransmissionCmd extends cmd {
 				break;
 				case 'remove' :
 				$id = $transmission->get(trim($_options['title']));
-				log::add('jeetransmission', 'debug', 'get : ' . print_r($id, true));
+				log::add('jeetransmission', 'debug', 'get : ' . print_r($id->arguments, true));
 				$result  = $transmission->remove(trim($_options['title']));
-				log::add('jeetransmission', 'debug', 'resultat : ' . $result->result);
+				log::add('jeetransmission', 'debug', 'resultat : ' . print_r($result->arguments, true));
 				break;
 				case 'purge' :
 				$result  = $transmission->remove(trim($_options['title']), true);
