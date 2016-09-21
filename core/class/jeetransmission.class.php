@@ -364,9 +364,9 @@ class jeetransmissionCmd extends cmd {
 				$eqLogic->btStatus();
 				break;
 				case 'remove' :
-				$id = $transmission->get(trim($_options['title']));
+				$id = $transmission->get(array($_options['title']),array( "id", "name", "status", "doneDate", "haveValid", "totalSize" ));
 				log::add('jeetransmission', 'debug', 'get : ' . print_r($id->arguments, true));
-				$result  = $transmission->remove(trim($_options['title']));
+				$result  = $transmission->remove(array($_options['title']));
 				log::add('jeetransmission', 'debug', 'resultat : ' . print_r($result->arguments, true));
 				break;
 				case 'purge' :
