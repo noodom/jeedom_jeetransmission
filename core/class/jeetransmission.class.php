@@ -358,7 +358,7 @@ class jeetransmissionCmd extends cmd {
 			$eqLogic = $this->getEqLogic();
 			$transmission = new TransmissionRPC($eqLogic->getConfiguration('url'), $eqLogic->getConfiguration('user'), $eqLogic->getConfiguration('password'));
 			$transmission->return_as_array = true;
-			log::add('jeetransmission', 'debug', $this->getLogicalId() . ' ' . $_options['title']);
+			log::add('jeetransmission', 'debug', $this->getLogicalId() . ' ' . $_options['title'] . ' ' . $eqLogic->getConfiguration('url'));
 			switch ($this->getLogicalId()) {
 				case 'query' :
 				$eqLogic->btStatus();
@@ -366,8 +366,10 @@ class jeetransmissionCmd extends cmd {
 				case 'remove' :
 				try
 				{
-					$id = $transmission->get(array("146"),array( "id", "name", "status", "doneDate", "haveValid", "totalSize" ));
+					$id = $transmission->get(146);
 					log::add('jeetransmission', 'debug', 'get : ' . print_r($id, true));
+					$id = $transmission->get();
+					log::add('jeetransmission', 'debug', 'cget : ' . print_r($id, true));
 					$result  = $transmission->remove(array("146"));
 					log::add('jeetransmission', 'debug', 'resultat : ' . print_r($result, true));
 				} catch (Exception $e) {
