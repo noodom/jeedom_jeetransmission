@@ -366,11 +366,7 @@ class jeetransmissionCmd extends cmd {
 				case 'remove' :
 				try
 				{
-					$id = $transmission->get(146);
-					log::add('jeetransmission', 'debug', 'get : ' . print_r($id, true));
-					$id = $transmission->get();
-					log::add('jeetransmission', 'debug', 'cget : ' . print_r($id, true));
-					$result  = $transmission->remove(array("146"));
+					$result  = $transmission->remove(intval($_options['title']));
 					log::add('jeetransmission', 'debug', 'resultat : ' . print_r($result, true));
 				} catch (Exception $e) {
 				  die('[ERROR] ' . $e->getMessage() . PHP_EOL);
