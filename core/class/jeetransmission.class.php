@@ -364,10 +364,15 @@ class jeetransmissionCmd extends cmd {
 				$eqLogic->btStatus();
 				break;
 				case 'remove' :
-				$id = $transmission->get(array("146"),array( "id", "name", "status", "doneDate", "haveValid", "totalSize" ));
-				log::add('jeetransmission', 'debug', 'get : ' . print_r($id, true));
-				$result  = $transmission->remove(array("146"));
-				log::add('jeetransmission', 'debug', 'resultat : ' . print_r($result, true));
+				try
+				{
+					$id = $transmission->get(array("146"),array( "id", "name", "status", "doneDate", "haveValid", "totalSize" ));
+					log::add('jeetransmission', 'debug', 'get : ' . print_r($id, true));
+					$result  = $transmission->remove(array("146"));
+					log::add('jeetransmission', 'debug', 'resultat : ' . print_r($result, true));
+				} catch (Exception $e) {
+				  die('[ERROR] ' . $e->getMessage() . PHP_EOL);
+				}
 				break;
 				case 'purge' :
 				$result  = $transmission->remove(trim($_options['title']), true);
