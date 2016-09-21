@@ -367,22 +367,21 @@ class jeetransmissionCmd extends cmd {
 				try
 				{
 					$result  = $transmission->remove(intval($_options['title']));
-					log::add('jeetransmission', 'debug', 'resultat : ' . print_r($result, true));
 				} catch (Exception $e) {
 				  die('[ERROR] ' . $e->getMessage() . PHP_EOL);
 				}
 				break;
 				case 'purge' :
-				$result  = $transmission->remove(trim($_options['title']), true);
+				$result  = $transmission->remove(intval($_options['title']), true);
 				break;
 				case 'start' :
-				$result  = $transmission->start(trim($_options['title']));
+				$result  = $transmission->start(intval($_options['title']));
 				break;
 				case 'stop' :
-				$result  = $transmission->stop(trim($_options['title']));
+				$result  = $transmission->stop(intval($_options['title']));
 				break;
 				case 'add' :
-				$result  = $transmission->add(trim($_options['title']));
+				$result  = $transmission->add(intval($_options['title']));
 				break;
 				case 'setlimitup' :
 				if (trim($_options['title']) == '0') {
