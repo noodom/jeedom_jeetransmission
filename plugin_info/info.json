@@ -1,6 +1,6 @@
 {
 	"id" : "jeetransmission",
-	"name" : "Transmission BT",
+	"name" : "Transmission",
 	"licence" : "AGPL",
 	"author" : "lunarok",
 	"require" : "2.3",
