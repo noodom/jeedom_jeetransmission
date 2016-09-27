@@ -3,6 +3,6 @@
 	"name" : "Transmission BT",
 	"licence" : "AGPL",
 	"author" : "lunarok",
-	"require" : "2.4",
+	"require" : "2.3",
 	"category" : "multimedia"
 }
