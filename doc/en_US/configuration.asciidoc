@@ -1,0 +1,39 @@
+==== Configuration du plugin
+
+Le plugin ne comporte pas de configuration générale.
+
+Lorsque l'on créer un équipement on doit fournir les éléments suivant :
+
+  * adresse du serveur Transmission
+
+  * utilisateur si requis
+
+  * mot de passe si requis
+
+  * adresse de consultation Transmission
+
+Pour la liste des torrents présents, le plugin fourni :
+
+  * ID : très important car c'est lui qu'il faut passer aux actions sur torrent
+
+  * Nom : le nom du torrent
+
+  * Statut : indique l'éthat
+
+Concernant les statuts voici les valeurs utiles :
+
+  * 4 : téléchargement en cours
+
+  * 6 : téléchargement terminé
+
+  * 0 : en pause
+
+==== Exemple d'utilisation en scénario
+
+Si vous souhaitez par exemple supprimer de Transmission tous les torrents terminés, vous pouvez utiliser un scénario comme celui-ci :
+
+Dans un premier temps on associe à une variable la valeur de la commande liste.
+
+Ensuite on analyse chaque élément (torrent) et si sa valeur de statut est 6 (terminé) on éxécute la commande d'arret avec ce torrent.
+
+image::../images/jeetransmission_scenar.png[Illustration]
