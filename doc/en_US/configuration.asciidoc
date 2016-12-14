@@ -1,6 +1,6 @@
 ==== The plugin configuration
 
-Le plugin ne comporte pas de configuration générale.
+The plugin does not have general configuration.
 
 Lorsque l'on créer un équipement on doit fournir les éléments suivant :
 
