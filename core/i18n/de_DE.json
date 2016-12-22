@@ -42,13 +42,13 @@
         "Vitesse de upload": "Upload Geschwindigkeit",
         "Limite de download": "Download Limit",
         "Limite de upload": "Upload Limit",
-        "Fixer la limite de download": "Fixer la limite de download",
+        "Fixer la limite de download": "Download Limit festlegen",
         "Fixer la limite de upload": "Upload Limit festlegen",
-        "Enlever un torrent": "Enlever un torrent",
-        "Purger un torrent": "Purger un torrent",
-        "Ajouter un torrent": "Ajouter un torrent",
-        "Arrêter un torrent": "Arrêter un torrent",
-        "Démarrer un torrent": "Démarrer un torrent",
-        "Rafraichir les informations de Transmission": "Rafraichir les informations de Transmission"
+        "Enlever un torrent": "Torrent entfernen",
+        "Purger un torrent": "Torrent löschen",
+        "Ajouter un torrent": "Torrent hinzufügen",
+        "Arrêter un torrent": "Torrent stoppen",
+        "Démarrer un torrent": "Torrent starten",
+        "Rafraichir les informations de Transmission": "Übertragung Informationen aktualisieren"
     }
 }
