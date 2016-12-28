@@ -1,4 +1,4 @@
-==== Transmission, gestionnaire de bittorrent
+==== Transmission, Manager of bittorrent
 
 This plugin allows to communicate with Transmission
 
