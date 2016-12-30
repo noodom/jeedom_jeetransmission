@@ -2,6 +2,6 @@
 
 This plugin allows to communicate with Transmission
 
-Il récupère les informations du statut de Transmission (download en cours, terminés ...)
+It retrieves the information of the status of Transmission (download in progress, completed...)
 
 Il permet également de piloter Transmission (supprimer un torrent, purger un torrent ...)

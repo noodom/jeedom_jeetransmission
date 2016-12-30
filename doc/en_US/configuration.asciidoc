@@ -2,7 +2,7 @@
 
 The plugin does not have general configuration.
 
-Lorsque l'on créer un équipement on doit fournir les éléments suivant :
+When you create an equipment you have to provide the following:
 
   * adresse du serveur Transmission
 
