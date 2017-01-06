@@ -1,6 +1,6 @@
-==== Configuration du plugin
+==== Plugin Konfiguration
 
-Le plugin ne comporte pas de configuration générale.
+Das Plugin enthält keine allgemeine Konfiguration.
 
 Lorsque l'on créer un équipement on doit fournir les éléments suivant :
 
