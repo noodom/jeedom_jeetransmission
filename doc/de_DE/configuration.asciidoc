@@ -16,7 +16,7 @@ Pour la liste des torrents présents, le plugin fourni :
 
   * ID : très important car c'est lui qu'il faut passer aux actions sur torrent
 
-  * Nom : le nom du torrent
+  * Name : der Name vom torrent
 
   * Statut : indique l'éthat
 
