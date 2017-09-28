@@ -387,14 +387,16 @@ class jeetransmissionCmd extends cmd {
 				if (trim($_options['title']) == '0') {
 					$result  = $transmission->sset(array('speed-limit-up-enabled' => 0));
 				} else {
-					$result  = $transmission->sset(array('speed-limit-up-enabled' => 1,'speed-limit-up' => trim($_options['title'])));
+					$result  = $transmission->sset(array('speed-limit-up' => trim($_options['title'])));
+					$result  = $transmission->sset(array('speed-limit-up-enabled' => 1));
 				}
 				break;
 				case 'setlimitdown' :
 				if (trim($_options['title']) == '0') {
 					$torrent  = $transmission->sset(array('speed-limit-down-enabled' => 0));
 				} else {
-					$torrent  = $transmission->sset(array('speed-limit-down-enabled' => 1,'speed-limit-down' => trim($_options['title'])));
+					$torrent  = $transmission->sset(array('speed-limit-down' => trim($_options['title'])));
+					$torrent  = $transmission->sset(array('speed-limit-down-enabled' => 1));
 				}
 				break;
 			}
